@@ -1,5 +1,5 @@
 import InputTextComponent from "@/component/chat/ChatInputBox.component";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { chatInputBoxStore } from "@/store/chat/inputbox.store";
 import ChatListComponent from "@/component/chat/ChatList.component";
 import { chatListStore } from "@/store/chat/chat.store";
@@ -7,13 +7,10 @@ import { useEffect } from "react";
 
 const App = () => {
   const [chatText, setChatText] = useAtom(chatInputBoxStore);
-  const [chatList, setChatList] = useAtom(chatListStore);
+  const setChatList = useSetAtom(chatListStore);
 
   const sendMessage = () => {
     if (!chatText || chatText == "") return;
-    focus();
-    alert("send message");
-    setChatText("");
     setChatList((prev) => [
       ...prev,
       {
@@ -22,6 +19,8 @@ const App = () => {
         message: chatText,
       },
     ]);
+
+    setChatText("");
   };
 
   useEffect(() => {

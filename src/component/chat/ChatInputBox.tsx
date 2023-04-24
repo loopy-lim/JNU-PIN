@@ -1,9 +1,15 @@
 import { chatInputBox } from "@/store/chat/inputbox";
 import { useAtom } from "jotai";
 
-const InputText = () => {
+const InputText = ({ sendMessage }: { sendMessage: () => void }) => {
   const [text, setText] = useAtom(chatInputBox);
   const inputTextButtonCss = !text ? "fill-[#D2D6DA]" : "fill-3239EF";
+  const removeTextBoxAndSendMessage = () => {
+    if (!text || text == "") return;
+    focus();
+    setText("");
+    sendMessage();
+  };
 
   return (
     <div className="flex justify-between items-center w-full bg-[#F5F6F8] rounded-full py-2 px-4">
@@ -15,8 +21,14 @@ const InputText = () => {
         onChange={(e) => {
           setText(e.target.value);
         }}
+        onKeyDown={(e) => {
+          e.key === "Enter" ? removeTextBoxAndSendMessage() : null;
+        }}
       ></input>
-      <button className="h-2 flex justify-center items-center">
+      <button
+        className="h-2 flex justify-center items-center"
+        onClick={removeTextBoxAndSendMessage}
+      >
         <svg
           className={"h-4 w-4 " + inputTextButtonCss}
           xmlns="http://www.w3.org/2000/svg"

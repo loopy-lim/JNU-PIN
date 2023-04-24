@@ -1,4 +1,4 @@
-import InputText from "./component/chat/ChatInputBox";
+import InputText from "@/component/chat/ChatInputBox";
 
 const App = () => {
   return (

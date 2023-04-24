@@ -7,9 +7,11 @@ const App = () => {
 
   return (
     <>
-      <h1>JNU-PIA</h1>
+      <h1 className="bg-gradient-to-b from-[#D4D7E2] to-transparent p-4 flex justify-center items-center">
+        전남대 스마트 비서
+      </h1>
       <div className="p-4">
-        <InputText />
+        <InputText sendMessage={sendMessage} />
       </div>
     </>
   );

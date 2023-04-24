@@ -1,8 +1,15 @@
 import InputText from "@/component/chat/ChatInputBox";
+import { useAtom } from "jotai";
+import { chatInputBox } from "./store/chat/inputbox";
 
 const App = () => {
+  const [chatText, setChatText] = useAtom(chatInputBox);
+
   const sendMessage = () => {
+    if (!chatText || chatText == "") return;
+    focus();
     alert("send message");
+    setChatText("");
   };
 
   return (

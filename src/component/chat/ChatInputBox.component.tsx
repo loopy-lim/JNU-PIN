@@ -1,8 +1,8 @@
-import { chatInputBox } from "@/store/chat/inputbox";
+import { chatInputBoxStore } from "@/store/chat/inputbox.store";
 import { useAtom } from "jotai";
 
-const InputText = ({ sendMessage }: { sendMessage: () => void }) => {
-  const [text, setText] = useAtom(chatInputBox);
+const InputTextComponent = ({ sendMessage }: { sendMessage: () => void }) => {
+  const [text, setText] = useAtom(chatInputBoxStore);
   const inputTextButtonCss = !text ? "fill-[#D2D6DA]" : "fill-3239EF";
 
   return (
@@ -16,7 +16,10 @@ const InputText = ({ sendMessage }: { sendMessage: () => void }) => {
           setText(e.target.value);
         }}
         onKeyDown={(e) => {
-          e.key === "Enter" ? sendMessage() : null;
+          if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+          }
         }}
       ></input>
       <button
@@ -48,4 +51,4 @@ const InputText = ({ sendMessage }: { sendMessage: () => void }) => {
   );
 };
 
-export default InputText;
+export default InputTextComponent;

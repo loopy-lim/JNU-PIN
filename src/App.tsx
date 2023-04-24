@@ -1,26 +1,55 @@
-import InputText from "@/component/chat/ChatInputBox";
+import InputTextComponent from "@/component/chat/ChatInputBox.component";
 import { useAtom } from "jotai";
-import { chatInputBox } from "./store/chat/inputbox";
+import { chatInputBoxStore } from "@/store/chat/inputbox.store";
+import ChatListComponent from "@/component/chat/ChatList.component";
+import { chatListStore } from "@/store/chat/chat.store";
+import { useEffect } from "react";
 
 const App = () => {
-  const [chatText, setChatText] = useAtom(chatInputBox);
+  const [chatText, setChatText] = useAtom(chatInputBoxStore);
+  const [chatList, setChatList] = useAtom(chatListStore);
 
   const sendMessage = () => {
     if (!chatText || chatText == "") return;
     focus();
     alert("send message");
     setChatText("");
+    setChatList((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        isMine: true,
+        message: chatText,
+      },
+    ]);
   };
 
+  useEffect(() => {
+    setChatList([
+      {
+        id: 1,
+        isMine: true,
+        message: "카카오 테크 캠퍼스에 대해서 알려줘",
+      },
+      {
+        id: 2,
+        isMine: false,
+        message:
+          "카카오 테크 캠퍼스는 팀 프로젝트 수행을 통한 현업 투입 가능한 주니어 개발자 양성을 목표로 하고 있습니다. 4월부터 11월 까지 3번에 걸쳐 운영될 예정입니다. 링크는 여기에 있습니다.",
+      },
+    ]);
+  }, []);
+
   return (
-    <>
+    <div className="h-screen w-screen">
       <h1 className="bg-gradient-to-b from-[#D4D7E2] to-transparent p-4 flex justify-center items-center">
         전남대 스마트 비서
       </h1>
-      <div className="p-4">
-        <InputText sendMessage={sendMessage} />
+      <div className="p-4 h-[calc(100%-4rem)] flex flex-col justify-between">
+        <ChatListComponent />
+        <InputTextComponent sendMessage={sendMessage} />
       </div>
-    </>
+    </div>
   );
 };
 

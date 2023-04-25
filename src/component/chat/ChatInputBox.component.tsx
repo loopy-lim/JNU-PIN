@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 
 const InputTextComponent = ({ sendMessage }: { sendMessage: () => void }) => {
   const [text, setText] = useAtom(chatInputBoxStore);
-  const inputTextButtonCss = !text ? "fill-[#D2D6DA]" : "fill-3239EF";
+  const inputTextButtonCss = !text ? "fill-[#D2D6DA]" : "fill-[#3239EF]";
 
   return (
     <div className="flex justify-between items-center w-full bg-[#F5F6F8] rounded-full py-2 px-4">

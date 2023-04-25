@@ -11,6 +11,7 @@ const ChatListComponent = () => {
         <ChatElement
           isMine={chat.isMine}
           message={chat.message}
+          isDone={chat.isDone}
           key={chat.id}
         />
       ))}

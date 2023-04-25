@@ -3,7 +3,6 @@ import { useAtom, useSetAtom } from "jotai";
 import { chatInputBoxStore } from "@/store/chat/inputbox.store";
 import ChatListComponent from "@/component/chat/ChatList.component";
 import { chatListStore } from "@/store/chat/chat.store";
-import { useEffect } from "react";
 
 const App = () => {
   const [chatText, setChatText] = useAtom(chatInputBoxStore);
@@ -16,28 +15,35 @@ const App = () => {
       {
         id: prev.length + 1,
         isMine: true,
+        isDone: true,
         message: chatText,
       },
     ]);
+    getMessage();
 
     setChatText("");
   };
 
-  useEffect(() => {
-    setChatList([
+  const getMessage = () => {
+    setChatList((prev) => [
+      ...prev,
       {
-        id: 1,
-        isMine: true,
-        message: "카카오 테크 캠퍼스에 대해서 알려줘",
-      },
-      {
-        id: 2,
+        id: prev.length + 1,
         isMine: false,
-        message:
-          "카카오 테크 캠퍼스는 팀 프로젝트 수행을 통한 현업 투입 가능한 주니어 개발자 양성을 목표로 하고 있습니다. 4월부터 11월 까지 3번에 걸쳐 운영될 예정입니다. 링크는 여기에 있습니다.",
+        isDone: false,
+        message: "",
       },
     ]);
-  }, []);
+    setTimeout(() => {
+      setChatList((prev) => {
+        const newChatList = [...prev];
+        newChatList[prev.length - 1].isDone = true;
+        newChatList[prev.length - 1].message =
+          "카카오 테크 캠퍼스는 팀 프로젝트 수행을 통한 현업 투입 가능한 주니어 개발자 양성을 목표로 하고 있습니다. 4월부터 11월 까지 3번에 걸쳐 운영될 예정입니다. 링크는 여기에 있습니다.";
+        return newChatList;
+      });
+    }, 3000);
+  };
 
   return (
     <div className="h-screen w-screen">

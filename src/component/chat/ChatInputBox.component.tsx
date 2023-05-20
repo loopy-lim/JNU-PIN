@@ -16,7 +16,7 @@ const InputTextComponent = ({ sendMessage }: { sendMessage: () => void }) => {
           setText(e.target.value);
         }}
         onKeyPress={(e) => {
-          // FIXME(2023-04-25): must use onKeyDown with KeyboardEvent.isComposing(한글 조합 문제)
+          // FIXME: must use onKeyDown with KeyboardEvent.isComposing(한글 조합 문제)
           if (e.key === "Enter") {
             e.preventDefault();
             sendMessage();

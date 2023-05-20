@@ -14,7 +14,8 @@ const ChatElement = ({
   return (
     <div
       className={
-        "py-2 rounded-xl w-fit px-4 my-2 max-w-[90%] " + chatTextBoxStyle
+        "py-2 rounded-xl w-fit px-4 my-2 max-w-[90%] break-words " +
+        chatTextBoxStyle
       }
     >
       {isDone ? (

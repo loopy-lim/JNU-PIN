@@ -1,5 +1,3 @@
-import { Player } from "@lottiefiles/react-lottie-player";
-
 const ChatElement = ({
   isMine,
   message,
@@ -21,12 +19,12 @@ const ChatElement = ({
       {isDone ? (
         message
       ) : (
-        <Player
-          autoplay={true}
-          loop={true}
-          className="h-4 scale-150"
-          speed={1.5}
-          src={"/typing-in-chat.json"}
+        <dotlottie-player
+          autoplay
+          loop
+          mode="normal"
+          src="/typing-in-chat.lottie"
+          class="w-[25%]"
         />
       )}
     </div>

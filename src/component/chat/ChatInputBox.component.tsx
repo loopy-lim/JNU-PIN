@@ -1,31 +1,52 @@
+import { sendMessage } from "@/functions/chat/chat.functions";
+import { ChatInputType, ChatListStore, isMicOn } from "@/store/chat/chat.store";
 import { chatInputBoxStore } from "@/store/chat/inputbox.store";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
+import { CiKeyboard } from "react-icons/ci";
+import ChatMicInputbox from "./ChatMicInputBox.component";
 
-const InputTextComponent = ({ sendMessage }: { sendMessage: () => void }) => {
-  const [text, setText] = useAtom(chatInputBoxStore);
-  const inputTextButtonCss = !text ? "fill-[#D2D6DA]" : "fill-[#3239EF]";
+const InputTextComponent = () => {
+  const [chatText, setChatText] = useAtom(chatInputBoxStore);
+  const [chatType, setChatType] = useAtom(ChatInputType);
+  const setIsMicOn = useSetAtom(isMicOn);
+  const inputTextButtonCss = !chatText ? "fill-[#D2D6DA]" : "fill-[#3239EF]";
+  const setChatList = useSetAtom(ChatListStore);
 
-  return (
+  return chatType == "mic" ? (
+    <div className="flex justify-between items-baseline ">
+      <div className="w-10" />
+      <ChatMicInputbox />
+      <button
+        className={"text-4xl "}
+        onClick={() => {
+          setChatType("text");
+          setIsMicOn(true);
+        }}
+      >
+        <CiKeyboard />
+      </button>
+    </div>
+  ) : (
     <div className="flex justify-between items-center w-full bg-[#F5F6F8] rounded-full py-2 px-4">
       <input
         type="text"
         className="w-full bg-transparent outline-none border-none"
         placeholder="메시지 입력"
-        value={text}
+        value={chatText}
         onChange={(e) => {
-          setText(e.target.value);
+          setChatText(e.target.value);
         }}
         onKeyPress={(e) => {
           // FIXME: must use onKeyDown with KeyboardEvent.isComposing(한글 조합 문제)
           if (e.key === "Enter") {
             e.preventDefault();
-            sendMessage();
+            sendMessage(chatText, setChatText, setChatList);
           }
         }}
       ></input>
       <button
         className="h-2 flex justify-center items-center"
-        onClick={sendMessage}
+        onClick={() => sendMessage(chatText, setChatText, setChatList)}
       >
         <svg
           className={"h-4 w-4 " + inputTextButtonCss}
@@ -47,6 +68,14 @@ const InputTextComponent = ({ sendMessage }: { sendMessage: () => void }) => {
             />
           </g>
         </svg>
+      </button>
+      <button
+        className="h-2 flex justify-center items-center"
+        onClick={() => {
+          setChatType("mic");
+        }}
+      >
+        <img className="h-4 w-4 mx-4" src="/mic.svg" alt="mic" />
       </button>
     </div>
   );

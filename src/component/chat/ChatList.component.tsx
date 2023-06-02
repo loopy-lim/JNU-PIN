@@ -1,9 +1,9 @@
 import { useAtomValue } from "jotai";
-import { chatListStore } from "@/store/chat/chat.store";
+import { ChatListStore } from "@/store/chat/chat.store";
 import ChatElement from "./ChatElement.component";
 
 const ChatListComponent = () => {
-  const chatList = useAtomValue(chatListStore);
+  const chatList = useAtomValue(ChatListStore);
 
   return (
     <div className="flex flex-col h-[calc(100%-3rem)] overflow-auto justify-end">

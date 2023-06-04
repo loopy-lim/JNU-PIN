@@ -10,7 +10,7 @@ const InputTextComponent = () => {
   const [chatType, setChatType] = useAtom(ChatInputType);
   const setIsMicOn = useSetAtom(isMicOn);
   const inputTextButtonCss = !chatText ? "fill-[#D2D6DA]" : "fill-[#3239EF]";
-  const setChatList = useSetAtom(ChatListStore);
+  const [chatList, setChatList] = useAtom(ChatListStore);
 
   return chatType == "mic" ? (
     <div className="flex justify-between items-baseline ">
@@ -40,13 +40,33 @@ const InputTextComponent = () => {
           // FIXME: must use onKeyDown with KeyboardEvent.isComposing(한글 조합 문제)
           if (e.key === "Enter") {
             e.preventDefault();
-            sendMessage(chatText, setChatText, setChatList);
+            setChatList(
+              (
+                prev: {
+                  id: number;
+                  isMine: boolean;
+                  isDone: boolean;
+                  message: string;
+                }[]
+              ) => [
+                ...prev,
+                {
+                  id: chatList.length,
+                  isMine: true,
+                  isDone: false,
+                  message: chatText,
+                },
+              ]
+            );
+            sendMessage(chatList.length, chatText, setChatText, setChatList);
           }
         }}
       ></input>
       <button
         className="h-2 flex justify-center items-center"
-        onClick={() => sendMessage(chatText, setChatText, setChatList)}
+        onClick={() =>
+          sendMessage(chatList.length, chatText, setChatText, setChatList)
+        }
       >
         <svg
           className={"h-4 w-4 " + inputTextButtonCss}

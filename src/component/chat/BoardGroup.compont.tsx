@@ -1,5 +1,5 @@
 import { BoardType } from "@/store/chat/chat.store";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useState } from "react";
 import { BsChevronCompactDown } from "react-icons/bs";
 

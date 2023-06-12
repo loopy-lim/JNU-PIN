@@ -1,3 +1,8 @@
+import { useLottie } from "lottie-react";
+import typing_in_chat from "../../assets/typing-in-chat.json";
+import { HiSpeakerWave } from "react-icons/hi2"
+import { textToVoice } from "@/functions/audio/audio.fetch";
+
 const ChatElement = ({
   isMine,
   message,
@@ -9,6 +14,13 @@ const ChatElement = ({
 }) => {
   const chatTextBoxStyle = isMine ? "bg-[#D7D9FC] ml-auto" : "bg-[#F2F4F6]";
 
+  const options = {
+    animationData: typing_in_chat,
+    loop: true,
+    autoplay: true,
+  };
+  const lottie = useLottie(options, { width: "4rem" });
+
   return (
     <div
       className={
@@ -16,17 +28,12 @@ const ChatElement = ({
         chatTextBoxStyle
       }
     >
-      {isDone ? (
-        message
-      ) : (
-        <dotlottie-player
-          autoplay
-          loop
-          mode="normal"
-          src="/typing-in-chat.lottie"
-          class="w-[25%]"
-        />
-      )}
+      {isDone
+        ? <>{
+          message.split("\n").map((v) => <div>{v}</div>)
+        } {!isMine ? <button onClick={() => textToVoice(message)}><HiSpeakerWave /></button> : ""}
+        </>
+        : lottie.View}
     </div>
   );
 };

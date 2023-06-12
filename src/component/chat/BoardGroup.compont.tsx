@@ -17,7 +17,7 @@ const BoardGroup = ({ sortList, selected }: BoardGroup) => {
   return (
     <div className="relative z-10 w-[100%]">
       <button
-        className="flex items-center rounded-2xl gap-[2px] text-[#7E7E7E] w-[100%] justify-between text-2xl"
+        className="flex items-center rounded-2xl gap-[2px] bg-white text-[#7E7E7E] w-[100%] justify-between text-2xl p-2"
         onClick={(e) => {
           e.preventDefault();
           setIsOpen(!isOpen);
@@ -28,7 +28,7 @@ const BoardGroup = ({ sortList, selected }: BoardGroup) => {
         <BsChevronCompactDown className="text-[#3D3C42]" />
       </button>
       {isOpen ? (
-        <div className="flex flex-col absolute w-full  bg-white -z-10 text-[#3D3C42] ">
+        <div className="flex flex-col absolute w-full  bg-white  text-[#3D3C42] ">
           {sortList.map((sort) => (
             <button
               className={

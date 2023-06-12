@@ -6,7 +6,7 @@ const ChatListComponent = () => {
   const chatList = useAtomValue(ChatListStore);
 
   return (
-    <div className="flex flex-col h-[calc(100%-3rem)] overflow-auto justify-end">
+    <div className="flex flex-col w-[100%]">
       {chatList.map((chat) => (
         <ChatElement
           isMine={chat.isMine}

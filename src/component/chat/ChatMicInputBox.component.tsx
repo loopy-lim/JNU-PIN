@@ -1,16 +1,20 @@
-import { isMicOn } from "@/store/chat/chat.store";
+import { BoardType, ChatListStore, isMicOn } from "@/store/chat/chat.store";
 import { useAtom } from "jotai";
 import { useLottie } from "lottie-react";
 import siri_motion from "../../assets/siri_motion.json";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { voiceToText } from "@/functions/audio/audio.fetch";
+import { sendMessage } from "@/functions/chat/chat.functions";
+import { chatInputBoxStore } from "@/store/chat/inputbox.store";
 
 const audioArray = [] as Blob[];
 let mediaRecorder: MediaRecorder;
 
 const ChatMicInputbox = () => {
-  // const setChatType = useSetAtom(ChatInputType);
   const [isMicOnValue, setIsMicOn] = useAtom(isMicOn);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const [chatText, setChatText] = useAtom(chatInputBoxStore);
+  const [boardType, setBoardType] = useAtom(BoardType);
+  const [chatList, setChatList] = useAtom(ChatListStore);
 
   const options = {
     animationData: siri_motion,
@@ -37,42 +41,53 @@ const ChatMicInputbox = () => {
         audioArray.push(event.data);
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         const blob = new Blob(audioArray, {
-          type: "audio/ogg codecs=opus",
+          type: "audio/mpeg",
         });
         audioArray.splice(0);
+        const text = await voiceToText(blob);
 
-        const blobUrl = window.URL.createObjectURL(blob);
-        const audioElement = audioRef.current as HTMLAudioElement;
+        setChatList(
+          (
+            prev: {
+              id: number;
+              isMine: boolean;
+              isDone: boolean;
+              message: string;
+            }[]
+          ) => [
+            ...prev,
+            {
+              id: chatList.length,
+              isMine: true,
+              isDone: true,
+              message: text,
+            },
+          ]
+        );
 
-        audioElement.src = blobUrl;
-        audioElement.play();
+        sendMessage(chatList.length, text, boardType, setChatText, setChatList);
       };
       mediaRecorder.start();
-      console.log(mediaRecorder);
 
       setIsMicOn(true);
     } else {
       mediaRecorder.stop();
       setIsMicOn(false);
-      console.log("stop");
     }
   };
 
   return (
-    <>
-      <audio ref={audioRef} controls></audio>
-      <button
-        className="flex justify-center items-center w-full rounded-full py-2 px-4"
-        onClick={() => {
-          setIsMicOn((v) => !v);
-          record();
-        }}
-      >
-        {lottie.View}
-      </button>
-    </>
+    <button
+      className="flex justify-center items-center w-full rounded-full py-2 px-4"
+      onClick={() => {
+        setIsMicOn((v) => !v);
+        record();
+      }}
+    >
+      {lottie.View}
+    </button>
   );
 };
 

@@ -1,5 +1,10 @@
 import { sendMessage } from "@/functions/chat/chat.functions";
-import { ChatInputType, ChatListStore, isMicOn } from "@/store/chat/chat.store";
+import {
+  BoardType,
+  ChatInputType,
+  ChatListStore,
+  isMicOn,
+} from "@/store/chat/chat.store";
 import { chatInputBoxStore } from "@/store/chat/inputbox.store";
 import { useAtom, useSetAtom } from "jotai";
 import { CiKeyboard } from "react-icons/ci";
@@ -8,6 +13,7 @@ import ChatMicInputbox from "./ChatMicInputBox.component";
 const InputTextComponent = () => {
   const [chatText, setChatText] = useAtom(chatInputBoxStore);
   const [chatType, setChatType] = useAtom(ChatInputType);
+  const [boardType, setBoardType] = useAtom(BoardType);
   const setIsMicOn = useSetAtom(isMicOn);
   const inputTextButtonCss = !chatText ? "fill-[#D2D6DA]" : "fill-[#3239EF]";
   const [chatList, setChatList] = useAtom(ChatListStore);
@@ -53,19 +59,31 @@ const InputTextComponent = () => {
                 {
                   id: chatList.length,
                   isMine: true,
-                  isDone: false,
+                  isDone: true,
                   message: chatText,
                 },
               ]
             );
-            sendMessage(chatList.length, chatText, setChatText, setChatList);
+            sendMessage(
+              chatList.length,
+              chatText,
+              boardType,
+              setChatText,
+              setChatList
+            );
           }
         }}
       ></input>
       <button
         className="h-2 flex justify-center items-center"
         onClick={() =>
-          sendMessage(chatList.length, chatText, setChatText, setChatList)
+          sendMessage(
+            chatList.length,
+            chatText,
+            boardType,
+            setChatText,
+            setChatList
+          )
         }
       >
         <svg
